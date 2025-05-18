@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Validation Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; }
+    .error { color: red; font-size: 0.9em; }
+    input { width: 100%; padding: 8px; margin-bottom: 10px; }
+    button { background: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Input Validation</h1>
+  <form id="validationForm">
+    <div>
+      <label>Full Name:</label>
+      <input type="text" name="name" placeholder="E.g.: Nimal Fernando">
+      <div class="error" id="nameError"></div>
+    </div>
+    <div>
+      <label>Email:</label>
+      <input type="email" name="email" placeholder="E.g.: nimal@gmail.com">
+      <div class="error" id="emailError"></div>
+    </div>
+    <div>
+      <label>Mobile (Sri Lanka):</label>
+      <input type="tel" name="mobile" placeholder="E.g.: +94771234567">
+      <div class="error" id="mobileError"></div>
+    </div>
+    <div>
+      <label>Password:</label>
+      <input type="password" name="password">
+      <div class="error" id="passwordError"></div>
+    </div>
+    <button type="submit">Validate</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('validationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Reset all error messages
+      document.querySelectorAll('.error').forEach(el => el.textContent = '');
+      document.getElementById('result').innerHTML = '';
+      
+      try {
+        const formData = new FormData(e.target);
+        const response = await fetch('/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(formData))
+        });
+  
+        const data = await response.json();
+  
+        if (!data.success) {
+          // Display errors under each field
+          data.errors.forEach(error => {
+            const errorElement = document.getElementById(`${error.field}Error`);
+            if (errorElement) {
+              errorElement.textContent = error.message;
+            }
+          });
+        } else {
+          // Success case
+          document.getElementById('result').innerHTML = `
+            <div class="success-box">
+              <h3>✅ ${data.message}</h3>
+              <pre>${JSON.stringify(data.data, null, 2)}</pre>
+            </div>
+          `;
+        }
+      } catch (error) {
+        document.getElementById('result').innerHTML = `
+          <div class="error">⚠️ Network error occurred</div>
+        `;
+      }
+    });
+  
+    // Real-time validation for better UX
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('blur', () => {
+        if (!input.value.trim()) {
+          const errorElement = document.getElementById(`${input.name}Error`);
+          if (errorElement) {
+            errorElement.textContent = `${input.labels[0].textContent} is required`;
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

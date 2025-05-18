@@ -1,0 +1,24 @@
+/* Error styling */
+.error {
+    color: #d32f2f;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+  
+  input:invalid {
+    border-color: #ff9800;
+  }
+  
+  /* Success message */
+  .success-box {
+    background: #e8f5e9;
+    border: 1px solid #4caf50;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+  }
+  
+  .success-box h3 {
+    color: #2e7d32;
+    margin-top: 0;
+  }
