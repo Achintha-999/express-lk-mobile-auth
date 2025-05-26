@@ -30,7 +30,7 @@ login-validation/ ├── package.json ├── public/ │ ├── css/ �
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/login-validation.git](https://github.com/Achintha-999/express-lk-mobile-auth
+   git clone https://github.com/Achintha-999/express-lk-mobile-auth
    cd login-validation
 
 2. Install dependencies:
